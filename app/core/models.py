@@ -78,10 +78,10 @@ class Confidente(models.Model):
         return self.nome
         
 class Paciente(models.Model):
+    nid = models.CharField(max_length=255, primary_key=True)
     nome = models.CharField(max_length=255)
     genero = models.CharField(max_length=20, choices=GENERO)
     data_nascimento = models.DateTimeField(auto_now=False)
-    nid = models.CharField(max_length=255)
     telefone = models.CharField(max_length=100)
     profissao = models.CharField(max_length=100)
     livro = models.ForeignKey(Livro, on_delete=models.SET_NULL, blank=True, null=True)
@@ -159,7 +159,7 @@ class ItemPedido(models.Model):
 class PedidoLaboratorio(models.Model):
     pass
     
-class FichaClinical(models.Model):
+class FichaClinica(models.Model):
     data_consulta = models.DateTimeField(auto_now=False)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     data_proxima_consulta = models.DateTimeField(auto_now=False)
