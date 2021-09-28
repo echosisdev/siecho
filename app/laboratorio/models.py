@@ -1,5 +1,5 @@
 from django.db import models
-from core.models import Paciente, UnidadeSanitaria
+from core.models import Paciente, Location
 
 
 
@@ -69,7 +69,7 @@ class ExameClinico(models.Model):
     globulinas = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     pcr = models.CharField(max_length=50, blank=True, null=True)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    unidade_sanitaria = models.ForeignKey(UnidadeSanitaria, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.paciente.nome

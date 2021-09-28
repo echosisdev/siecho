@@ -1,5 +1,5 @@
 from django.db import models
-from core.models import Paciente, UnidadeSanitaria
+from core.models import Paciente, Location
 
 class FichaApss(models.Model):
     populacao_chave = models.CharField(max_length=100, blank=True, null=True)
@@ -53,7 +53,7 @@ class FichaApss(models.Model):
     data_consentimento = models.DateTimeField(auto_now=False, null=True, blank=True)
     tipo_contacto = models.CharField(max_length=100, null=True, blank=True)
     confidente_concorda_contacto = models.CharField(max_length=100, null=True, blank=True)
-    unidade_sanitaria = models.ForeignKey(UnidadeSanitaria, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
 
 
@@ -65,7 +65,6 @@ class VisitaDomiciliaria(models.Model):
     pagina_livro = models.IntegerField(null=True, blank=True)
     linha_livro = models.IntegerField(null=True, blank=True)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    unidade_sanitaria = models.ForeignKey(UnidadeSanitaria, on_delete=models.CASCADE)
     nome_casa = models.CharField(max_length=255, null=True, blank=True)
     bairro = models.CharField(max_length=255, null=True, blank=True)
     avenida_ou_rua = models.CharField(max_length=255, null=True, blank=True)
@@ -90,7 +89,7 @@ class VisitaDomiciliaria(models.Model):
     servico_refere = models.CharField(max_length=255, null=True)
     voluntario = models.CharField(max_length=255, null=True, blank=True)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    unidade_sanitaria = models.ForeignKey(UnidadeSanitaria, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.paciente.nome

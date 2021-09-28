@@ -1,17 +1,14 @@
 from django.contrib import admin
-from core.models import *
+from core.models import Location, Paciente, Programa, FichaResumo, FichaClinica, TesteHivPos, Confidente
 from apss.models import FichaApss, VisitaDomiciliaria, RelatorioVisita
 from laboratorio.models import ExameClinico
 
 classes = [
-    Provincia,
-    Distrito,
-    UnidadeSanitaria,
+    Location,
     Paciente,
     Programa,
     FichaResumo,
     FichaClinica,
-    Livro,
     TesteHivPos,
     Confidente,
     FichaApss,

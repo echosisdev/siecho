@@ -1,5 +1,5 @@
 from django.db import models
-from core.models import Paciente, UnidadeSanitaria
+from core.models import Paciente, Location
 
 class Fila(models.Model):
     data_levantamento = models.DateTimeField(auto_now=False)
@@ -12,7 +12,7 @@ class Fila(models.Model):
     numero_campo = models.IntegerField(null=True, blank=True)
     modo_dispensa = models.CharField(max_length=100, blank=True, null=True)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    unidade_sanitaria = models.ForeignKey(UnidadeSanitaria, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.paciente.nome
@@ -23,6 +23,7 @@ class Filt(models.Model):
     tipo_dispensa = models.CharField(max_length=100)
     seguimento_tratamento = models.CharField(max_length=100, blank=True, null=True)
     data_proximo_levantamento = models.DateTimeField(auto_now=False)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.regime_tpt

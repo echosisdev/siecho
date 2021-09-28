@@ -32,40 +32,51 @@ ESTADO_PERMANENCIA = (
     ('Obito', 'Obito'),
 )
 # Create your models here.
-class Provincia(models.Model):
-    nome = models.CharField(max_length=255)
+# class Provincia(models.Model):
+#     nome = models.CharField(max_length=255)
+    
+#     def __str__(self):
+#         return self.nome
+    
+# class Distrito(models.Model):
+#     """Model definition for Distrito."""
+#     nome = models.CharField(max_length=255)
+#     provincia = models.ForeignKey('Provincia', on_delete=models.CASCADE)
+    
+#     def __str__(self):
+#         return self.nome
+    
+# class UnidadeSanitaria(models.Model):
+#     nome = models.CharField(max_length=255)
+#     distrito = models.ForeignKey('Distrito', on_delete=models.CASCADE)
+    
+#     class Meta:
+#         verbose_name = 'Unidade Sanitaria'
+#         verbose_name_plural = 'Unidades Sanitarias'
+    
+#     def __str__(self):
+#         return self.nome
+    
+# class Livro(models.Model):
+#     tipo = models.CharField(max_length=50, choices=TIPO_LIVRO)
+#     numero = models.IntegerField()
+#     pagina = models.IntegerField()
+#     linha = models.IntegerField()
+    
+#     def __str__(self):
+#         return self.tipo
+    
+class Location(models.Model):
+    uuid = models.CharField(max_length=255, primary_key=True)
+    location_id = models.IntegerField()
+    name = models.CharField(max_length=255, blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    state_province = models.CharField(max_length=255, blank=True, null=True)
+    country = models.CharField(max_length=255, blank=True, null=True)
+    parent_location = models.IntegerField(null=True, blank=True)
     
     def __str__(self):
-        return self.nome
-    
-class Distrito(models.Model):
-    """Model definition for Distrito."""
-    nome = models.CharField(max_length=255)
-    provincia = models.ForeignKey('Provincia', on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.nome
-    
-class UnidadeSanitaria(models.Model):
-    nome = models.CharField(max_length=255)
-    distrito = models.ForeignKey('Distrito', on_delete=models.CASCADE)
-    
-    class Meta:
-        verbose_name = 'Unidade Sanitaria'
-        verbose_name_plural = 'Unidades Sanitarias'
-    
-    def __str__(self):
-        return self.nome
-    
-class Livro(models.Model):
-    tipo = models.CharField(max_length=50, choices=TIPO_LIVRO)
-    numero = models.IntegerField()
-    pagina = models.IntegerField()
-    linha = models.IntegerField()
-    
-    def __str__(self):
-        return self.tipo
-    
+        return self.name
 class Confidente(models.Model):
     nome = models.CharField(max_length=255)
     parentesco = models.CharField(max_length=255)
@@ -84,10 +95,15 @@ class Paciente(models.Model):
     data_nascimento = models.DateTimeField(auto_now=False)
     telefone = models.CharField(max_length=100)
     profissao = models.CharField(max_length=100)
-    livro = models.ForeignKey(Livro, on_delete=models.SET_NULL, blank=True, null=True)
+    livro = models.CharField(max_length=15)
+    pagina = models.CharField(max_length=4)
+    linha = models.CharField(max_length=4)
     confidente = models.ForeignKey(Confidente, on_delete=models.CASCADE)
-    endereco = models.CharField(max_length=500, null=True, blank=True)
-    
+    distrito = models.CharField(max_length=100, null=True, blank=True)
+    posto_administrativo = models.CharField(max_length=100, null=True, blank=True)
+    localidade = models.CharField(max_length=100, null=True, blank=True)
+    bairro = models.CharField(max_length=100, null=True, blank=True)
+    ponto_referencia = models.CharField(max_length=100, null=True, blank=True)
     
     def __str__(self):
         return self.nome
@@ -131,7 +147,7 @@ class FichaResumo(models.Model):
     gravidez = models.BooleanField(default=False)
     lactante = models.BooleanField(default=False)
     estadio_oms = models.CharField(max_length=10, null=True, blank=True)
-    unidade_sanitaria = models.ForeignKey(UnidadeSanitaria, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.nome
@@ -142,7 +158,7 @@ class Programa(models.Model):
     formas_entrada = models.CharField(max_length=50, choices=FORMAS_ENTRADA)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     regime_arv = models.CharField(max_length=100, null=True, blank=True)
-    unidade_sanitaria = models.ForeignKey(UnidadeSanitaria, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     estado_permanencia = models.CharField(max_length=100, choices=ESTADO_PERMANENCIA)
 
     def __str__(self):
@@ -154,11 +170,6 @@ class DiagnosticoITS(models.Model):
     def __str__(self):
         return self.descricao
 
-class ItemPedido(models.Model):
-    pass
-class PedidoLaboratorio(models.Model):
-    pass
-    
 class FichaClinica(models.Model):
     data_consulta = models.DateTimeField(auto_now=False)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
@@ -202,5 +213,6 @@ class FichaClinica(models.Model):
     dispensa_semestral = models.CharField(max_length=255, blank=True, null=True)
     dispensa_comunitaria = models.CharField(max_length=255, blank=True, null=True)
     farmacia_privada = models.CharField(max_length=255, blank=True, null=True)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     
     
