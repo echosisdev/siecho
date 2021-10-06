@@ -31,65 +31,22 @@ ESTADO_PERMANENCIA = (
     ('Transferido para', 'Transferido para'),
     ('Obito', 'Obito'),
 )
-# Create your models here.
-# class Provincia(models.Model):
-#     nome = models.CharField(max_length=255)
-    
-#     def __str__(self):
-#         return self.nome
-    
-# class Distrito(models.Model):
-#     """Model definition for Distrito."""
-#     nome = models.CharField(max_length=255)
-#     provincia = models.ForeignKey('Provincia', on_delete=models.CASCADE)
-    
-#     def __str__(self):
-#         return self.nome
-    
-# class UnidadeSanitaria(models.Model):
-#     nome = models.CharField(max_length=255)
-#     distrito = models.ForeignKey('Distrito', on_delete=models.CASCADE)
-    
-#     class Meta:
-#         verbose_name = 'Unidade Sanitaria'
-#         verbose_name_plural = 'Unidades Sanitarias'
-    
-#     def __str__(self):
-#         return self.nome
-    
-# class Livro(models.Model):
-#     tipo = models.CharField(max_length=50, choices=TIPO_LIVRO)
-#     numero = models.IntegerField()
-#     pagina = models.IntegerField()
-#     linha = models.IntegerField()
-    
-#     def __str__(self):
-#         return self.tipo
+
     
 class Location(models.Model):
-    uuid = models.CharField(max_length=255, primary_key=True)
-    location_id = models.IntegerField()
+    location_id = models.CharField(max_length=255, primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
     state_province = models.CharField(max_length=255, blank=True, null=True)
     country = models.CharField(max_length=255, blank=True, null=True)
-    parent_location = models.IntegerField(null=True, blank=True)
+    parent_location = models.CharField(max_length=255, null=True, blank=True)
     
     def __str__(self):
         return self.name
-class Confidente(models.Model):
-    nome = models.CharField(max_length=255)
-    parentesco = models.CharField(max_length=255)
-    telefone1 = models.CharField(max_length=255)
-    telefone2 = models.CharField(max_length=255)
-    endereco = models.CharField(max_length=500)
-    
-    
-    def __str__(self):
-        return self.nome
-        
+
 class Paciente(models.Model):
-    nid = models.CharField(max_length=255, primary_key=True)
+    patient_id = models.CharField(max_length=255, primary_key=True)
+    nid = models.CharField(max_length=255)
     nome = models.CharField(max_length=255)
     genero = models.CharField(max_length=20, choices=GENERO)
     data_nascimento = models.DateTimeField(auto_now=False)
@@ -98,7 +55,11 @@ class Paciente(models.Model):
     livro = models.CharField(max_length=15)
     pagina = models.CharField(max_length=4)
     linha = models.CharField(max_length=4)
-    confidente = models.ForeignKey(Confidente, on_delete=models.CASCADE)
+    nome_confidente = models.CharField(max_length=255, blank=True, null=True)
+    confidente_parentesco = models.CharField(max_length=255, blank=True, null=True)
+    telefone1_confidente = models.CharField(max_length=255, blank=True, null=True)
+    telefone2_confidente = models.CharField(max_length=255, blank=True, null=True)
+    endereco_confidente = models.CharField(max_length=500, null=True, blank=True)
     distrito = models.CharField(max_length=100, null=True, blank=True)
     posto_administrativo = models.CharField(max_length=100, null=True, blank=True)
     localidade = models.CharField(max_length=100, null=True, blank=True)
@@ -117,7 +78,7 @@ class TesteHivPos(models.Model):
     
 
     
-class FichaResumo(models.Model):
+class Inscricao(models.Model):
     paciente = models.OneToOneField(Paciente, on_delete=models.CASCADE, primary_key=True)
     data_abertura = models.DateTimeField(auto_now=False)
     data_teste_hiv_pos = models.DateTimeField(auto_now=False, blank=True, null=True)
@@ -149,6 +110,10 @@ class FichaResumo(models.Model):
     estadio_oms = models.CharField(max_length=10, null=True, blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     
+    
+    class Meta:
+        verbose_name_plural = 'Inscricoes'
+    
     def __str__(self):
         return self.nome
     
@@ -170,7 +135,7 @@ class DiagnosticoITS(models.Model):
     def __str__(self):
         return self.descricao
 
-class FichaClinica(models.Model):
+class ConsultaClinica(models.Model):
     data_consulta = models.DateTimeField(auto_now=False)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     data_proxima_consulta = models.DateTimeField(auto_now=False)
@@ -214,5 +179,11 @@ class FichaClinica(models.Model):
     dispensa_comunitaria = models.CharField(max_length=255, blank=True, null=True)
     farmacia_privada = models.CharField(max_length=255, blank=True, null=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
+
     
+    class Meta:
+        verbose_name = 'Consulta Clinica'
+        verbose_name_plural = 'Consultas Clinicas'
     
+    def __str__(self):
+        return self.paciente.nome

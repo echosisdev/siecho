@@ -1,7 +1,7 @@
 from django.db import models
 from core.models import Paciente, Location
 
-class FichaApss(models.Model):
+class ConsultaApss(models.Model):
     populacao_chave = models.CharField(max_length=100, blank=True, null=True)
     livro_apps = models.IntegerField()
     pagina_livro = models.IntegerField()
@@ -55,6 +55,10 @@ class FichaApss(models.Model):
     confidente_concorda_contacto = models.CharField(max_length=100, null=True, blank=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name = 'Consulta Apss'
+        verbose_name_plural = 'Consultas Apss'
 
 
     def __str__(self):

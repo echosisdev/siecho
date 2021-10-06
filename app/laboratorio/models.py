@@ -71,5 +71,9 @@ class ExameClinico(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     
+    class Meta:
+        verbose_name = 'Exame Clinico'
+        verbose_name_plural = 'Exames Clinicos'
+    
     def __str__(self):
         return self.paciente.nome
